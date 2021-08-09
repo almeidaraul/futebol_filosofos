@@ -52,13 +52,31 @@ bool read_move(config &c) {
 	return false;
 }
 
+void write_player(int i) {
+	cout << "f " << i << '\n';
+}
+
+void write_jumps(vector<int> path) {
+	cout << "o " << path.size();
+	for (auto jump: path)
+		cout << ' ' << jump;
+	cout << '\n';
+}
+
+void write_end() {
+	cout << "n\n";
+}
+
 void write_move(char cmd, int i, vector<int> path) {
-	cout << cmd;
-	if (cmd != 'n') {
-		cout << ' ' << i;
-		if (cmd == 'o')
-			for (auto jump_destination: path)
-				cout << ' ' << jump_destination;
-		cout << '\n';
+	switch(cmd) {
+		case 'f':
+			write_player(i);
+			break;
+		case 'o':
+			write_jumps(path);
+			break;
+		case 'n':
+			write_end();
+			break;
 	}
 }

@@ -1,7 +1,9 @@
 #include <iostream>
+#include <iterator>
 #include <vector>
 #include <algorithm>
 #include <string>
+#include <cmath>
 
 typedef enum {
 	LEFT, RIGHT
@@ -24,4 +26,7 @@ struct config {
 
 config read_config();
 bool read_move(config &c);
+void write_player(int i);
+void write_jumps(vecvtor<int> path);
+void write_end();
 void write_move(char cmd, int i, std::vector<int> path);
