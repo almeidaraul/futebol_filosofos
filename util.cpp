@@ -94,17 +94,17 @@ bool config::caiPosicaoMorta(int direction) {
 
 }
 
-int melhorPosicaoFilosofo(vector <tile> tabuleiro, int direction) {
+int config::melhorPosicaoFilosofo(vector <tile> tabuleiro, int direction) {
 
         
-		auto ball_pos = find(this->tabuleiro.begin(), this->tabuleiro.end(), BALL);
+		auto ball_pos = find(this->field.begin(), this->field.end(), BALL);
         while (*(ball_pos + direction) == PLAYER) {
             while (*(ball_pos + direction) == PLAYER)
                 ball_pos = ball_pos + direction;
             ball_pos = ball_pos+direction;
         }
 
-        return (distance(tabuleiro.begin(), ball_pos) + direction)
+        return (distance(tabuleiro.begin(), ball_pos) + direction);
 }
 
 void config::play() {
@@ -119,7 +119,7 @@ void config::play() {
 		else if (fazGol(-direction))    //se o oponente pode fazer gol
             write_jumps(moveBolaVetor(field_copia, direction));
 				//empurra a bola pra frente
-		else if (caiPosicaoMorta())     //se cai exatamente ao lado do gol
+		else if (caiPosicaoMorta(direction))     //se cai exatamente ao lado do gol
             write_player(distance(field_copia.begin(), gol_pos) - direction);
 				//coloca um filosófo na posição antes do gol
 		else if (haDoisOuMaisSaltos(direction))
