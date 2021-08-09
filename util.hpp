@@ -24,3 +24,4 @@ struct config {
 
 config read_config();
 bool read_move(config &c);
+void write_move(char cmd, int i, std::vector<int> path);

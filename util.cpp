@@ -51,3 +51,14 @@ bool read_move(config &c) {
 	} else return true;
 	return false;
 }
+
+void write_move(char cmd, int i, vector<int> path) {
+	cout << cmd;
+	if (cmd != 'n') {
+		cout << ' ' << i;
+		if (cmd == 'o')
+			for (auto jump_destination: path)
+				cout << ' ' << jump_destination;
+		cout << '\n';
+	}
+}

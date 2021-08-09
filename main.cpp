@@ -6,5 +6,6 @@ int main() {
 	bool over;
 	do {
 		over = read_move(c);
+		write_move('f', 1, vector<int>());
 	} while (!over);
 }
