@@ -6,6 +6,6 @@ int main() {
 	bool over;
 	do {
 		over = read_move(c);
-		write_move('o', 1, vector<int>({1, 2, 3}));
+		write_jumps(vector<int>({1, 2, 3}));
 	} while (!over);
 }

@@ -22,11 +22,14 @@ struct config {
 	config (char s, unsigned int k, std::string _field);
 
 	void insert_player(int i);
+	std::vector<tile>::iterator moveBola(std::vector<tile> tabuleiro, int direction, std::vector<tile>::iterator ball_pos);
+	bool fazGol(int direction);
+	bool haDoisOuMaisSaltos(int direction);
+	bool caiPosicaoMorta(int direction);
+	void play();
 };
 
 config read_config();
 bool read_move(config &c);
 void write_player(int i);
-void write_jumps(vecvtor<int> path);
-void write_end();
-void write_move(char cmd, int i, std::vector<int> path);
+void write_jumps(std::vector<int> path);
