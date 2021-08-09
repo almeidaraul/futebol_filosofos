@@ -24,7 +24,6 @@ struct config {
 	void insert_player(int i);
 	std::vector<tile>::iterator moveBolaIterador(std::vector <tile> tabuleiro, int direction);
 	std::vector<int> moveBolaVetor(std::vector <tile> tabuleiro, int direction) ;
-	//std::vector<tile>::iterator moveBola(std::vector<tile> tabuleiro, int direction, std::vector<tile>::iterator ball_pos);
 	int melhorPosicaoFilosofo(std::vector <tile> tabuleiro, int direction);
 	bool fazGol(int direction);
 	bool haDoisOuMaisSaltos(int direction);

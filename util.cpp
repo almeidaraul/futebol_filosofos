@@ -153,8 +153,8 @@ bool read_move(config &c) {
 			cin >> dest;
 			//pula pro destino
 		}
-	} else return true;
-	return false;
+	} else return false;
+	return true;
 }
 
 void write_player(int i) {
