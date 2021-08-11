@@ -3,7 +3,9 @@
 #include <vector>
 #include <algorithm>
 #include <string>
+#include <cstring>
 #include <cmath>
+#include "campo.h"
 
 typedef enum {
 	LEFT, RIGHT
@@ -16,6 +18,7 @@ typedef enum {
 struct config {
 	playing_side s;
 	unsigned int k;
+	bool over;
 	std::vector<tile> field;
 
 	config ();
@@ -31,7 +34,6 @@ struct config {
 	void play();
 };
 
-config read_config();
-bool read_move(config &c);
-void write_player(int i);
-void write_jumps(std::vector<int> path);
+config read_move();
+void write_player(int i, playing_side s);
+void write_jumps(std::vector<int> path, playing_side s);
