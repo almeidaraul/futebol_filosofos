@@ -167,6 +167,10 @@ config read_move(config c = config()) {
 	char buf[512];
 	campo_recebe(buf);
 	vector<string> split = split_string(buf);
+	cout << "Read opponent move:";
+	for (size_t i = 3; i < split.size(); ++i)
+		cout << ' ' << split[i];
+	cout << endl;
 	_s = split[0][0];
 	_k = stoi(split[1]);
 	string _field = split[2];
