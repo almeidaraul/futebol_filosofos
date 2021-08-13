@@ -99,13 +99,18 @@ int config::melhorPosicaoFilosofo(vector <tile> tabuleiro, int direction) {
 
         
 		auto ball_pos = find(this->field.begin(), this->field.end(), BALL);
+		auto gol_pos = (this->s == LEFT) ? field_copia.end()-1 : field_copia.begin();
         while (*(ball_pos + direction) == PLAYER) {
             while (*(ball_pos + direction) == PLAYER)
                 ball_pos = ball_pos + direction;
             ball_pos = ball_pos+direction;
         }
 
-        return (distance(tabuleiro.begin(), ball_pos) + direction);
+        int posicao_filosofo = distance(tabuleiro.begin(), ball_pos);
+
+        if ((abs(distance(ball_pos, gol_pos))) % 2 == 0)
+            posicao_filosos += direction;
+        return posicao_filosofo;
 }
 
 void config::play() {
