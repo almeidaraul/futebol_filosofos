@@ -31,7 +31,7 @@ struct config {
 	std::vector<int> moveBolaVetor(std::vector <tile> &tabuleiro, int direction) ;
 	int melhorPosicaoFilosofo(std::vector <tile> &tabuleiro, int direction);
 	bool fazGol(int direction);
-	bool haDoisOuMaisSaltos(int direction);
+	bool deveSaltar(int direction);
 	bool caiPosicaoMorta(int direction);
 	void play();
 };

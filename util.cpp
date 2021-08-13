@@ -96,7 +96,7 @@ bool config::fazGol(int direction) {
 
 }
 
-bool config::haDoisOuMaisSaltos(int direction) {
+bool config::deveSaltar(int direction) {
 
 		vector <tile> field_copia = this->field;
 		auto ball_pos = find(field_copia.begin(), field_copia.end(), BALL);
@@ -105,7 +105,9 @@ bool config::haDoisOuMaisSaltos(int direction) {
 		cout << "dist: " << dist << endl;
 		cout << "igual: " << (moveBolaIterador(field_copia, direction) == ball_pos) << endl;
 
-		if (dist > 2)
+        int distancia_a_saltar = (this->k/4 > 3) ? this->k/4 : 3;
+
+		if (dist > distancia_a_saltar)
 				return true;
 		return false;
 
@@ -182,7 +184,7 @@ void config::play() {
 						cout << "caiPosicaoMorta(direction)\n";
 		}
 				//coloca um filosófo na posição antes do gol
-		else if (haDoisOuMaisSaltos(direction)) {
+		else if (deveSaltar(direction)) {
             write_jumps(moveBolaVetor(field_copia, direction), s);
 						cout << "haDoisOuMaisSaltos(direction)\n";
 		}
