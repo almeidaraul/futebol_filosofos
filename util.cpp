@@ -21,6 +21,9 @@ config::config (char s, unsigned int k, string _field) : s(s == 'e' ? LEFT : RIG
 }
 
 void config::insert_player(int i) {
+    for (auto a: field)
+        cout << a;
+    cout << endl;
 	if (field[i] != EMPTY)
 		cerr << "Tried inserting player at non-empty position " << i << '\n';
 	else
@@ -31,13 +34,28 @@ vector<tile>::iterator config::moveBolaIterador(vector <tile> &tabuleiro, int di
 
 		auto ball_pos = find(tabuleiro.begin(), tabuleiro.end(), BALL);
 		while (*(ball_pos + direction) == PLAYER) {
+                for (auto a: tabuleiro)
+                    cout << a;
+                cout << endl;
 				auto destination = ball_pos + direction;
+                cout << "a" << endl;
 				while (*destination == PLAYER)
 						destination += direction;
-				fill(ball_pos, destination, EMPTY);
+                cout << "b" << endl;
+                if (distance(tabuleiro.begin(), ball_pos) < distance(tabuleiro.begin(), destination))
+				    fill(ball_pos, destination, EMPTY);
+                else
+				    fill(destination, ball_pos, EMPTY);
+                cout << "c" << endl;
 				*destination = BALL;
+                cout << "d" << endl;
 				ball_pos = destination;
+                for (auto a: tabuleiro)
+                    cout << a;
+                cout << endl;
 		}
+
+        cout << "fim bola iterador" << endl;
 
 		return ball_pos;
 
@@ -53,7 +71,10 @@ vector<int> config::moveBolaVetor(vector <tile> &tabuleiro, int direction) {
 				while (*destination == PLAYER)
 						destination += direction;
                 v.push_back(distance(tabuleiro.begin(), destination));
-				fill(ball_pos, destination, EMPTY);
+                if (distance(tabuleiro.begin(), ball_pos) < distance(tabuleiro.begin(), destination))
+				    fill(ball_pos, destination, EMPTY);
+                else
+				    fill(destination, ball_pos, EMPTY);
 				*destination = BALL;
 				ball_pos = destination;
 		}
@@ -66,6 +87,8 @@ bool config::fazGol(int direction) {
 
 		vector <tile> field_copia = this->field;
 		auto gol_pos = (this->s == LEFT) ? field_copia.end()-1 : field_copia.begin();
+
+        cout << "faz gol" << endl;
 
 		if (distance(moveBolaIterador(field_copia, direction), gol_pos) == 0)
 				return true;
@@ -102,7 +125,7 @@ bool config::caiPosicaoMorta(int direction) {
 int config::melhorPosicaoFilosofo(vector <tile> &tabuleiro, int direction) {
 
         
-		auto ball_pos = find(tabuleiro.begin(), tabuleiro.end(), BALL)+1;
+		auto ball_pos = find(tabuleiro.begin(), tabuleiro.end(), BALL);
 		auto gol_pos = (this->s == LEFT) ? tabuleiro.end()-1 : tabuleiro.begin();
 
 		cout << "tile\n";
@@ -114,24 +137,26 @@ int config::melhorPosicaoFilosofo(vector <tile> &tabuleiro, int direction) {
 			cout << x;
 		cout << endl;
 		cout << distance(tabuleiro.begin(), ball_pos) << " <- ball_pos\n";
-
-		while (ball_pos != tabuleiro.end() && (*(ball_pos) == PLAYER || *(ball_pos) == EMPTY && *(ball_pos-direction) == PLAYER))
+/*
+    	while (ball_pos != tabuleiro.end() && (*(ball_pos) == PLAYER || *(ball_pos) == EMPTY && *(ball_pos-direction) == PLAYER))
 			ball_pos += direction;
-
-		/*
+*/
+		
         while (*(ball_pos + direction) == PLAYER) {
             while (*(ball_pos + direction) == PLAYER)
                 ball_pos = ball_pos + direction;
             ball_pos = ball_pos+direction;
         }
-				*/
+
+        if (*(ball_pos) == BALL)
+            ball_pos += direction;
+        if (*(ball_pos-direction) != BALL && (abs(distance(ball_pos, gol_pos))) % 2 == 0)
+            ball_pos += direction;
 
         int posicao_filosofo = distance(tabuleiro.begin(), ball_pos);
-
 				cout << "distancia: " << abs(distance(ball_pos, gol_pos)) << endl;
+				cout << "pos_filosofo: " << posicao_filosofo << endl;
 
-        if (*(ball_pos-direction) != BALL && (abs(distance(ball_pos, gol_pos))) % 2 == 0)
-            posicao_filosofo += direction;
         return posicao_filosofo;
 }
 
@@ -141,6 +166,7 @@ void config::play() {
 		int direction = (this->s == LEFT) ? 1 : -1;
 		auto gol_pos = (this->s == LEFT) ? field_copia.end()-1 : field_copia.begin();
 
+        cout << "play" << endl;
 		
 		if (fazGol(direction)) {
             write_jumps(moveBolaVetor(field_copia, direction), s);
@@ -172,13 +198,15 @@ void config::play() {
 vector<string> split_string(string s) {
 	vector<string> ans;
 	string t = "";
-	for (auto c: s)
+	for (auto c: s) {
 		if (c == ' ' || c == '\n') {
 			ans.push_back(t);
 			t = "";
 		} else {
 			t.push_back(c);
 		}
+        cout << t << endl;
+    }
 	return ans;
 }
 
@@ -196,10 +224,10 @@ config read_move() {
 	_k = stoi(split[1]);
 	string _field = split[2];
 	config c = config(_s, _k, _field);
-	if (split.size() > 3) {
-		char cmd = split[3][0];
+/*	if (split.size() > 3) {
+		char cmd = split[4][0];
 		if (cmd == 'f') {
-			int i = stoi(split[4]);
+			int i = stoi(split[5]);
 			c.insert_player(i);
 		} else if (cmd == 'o') {
 			int jumps, dest;
@@ -212,6 +240,8 @@ config read_move() {
 			}
 		}
 	}
+*/
+    cout << "a" << endl;
 	c.over = c.field[0] == BALL || c.field[c.k] == BALL;
 	return c;
 }
