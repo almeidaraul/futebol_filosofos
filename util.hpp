@@ -39,4 +39,4 @@ struct config {
 config read_move();
 void write_player(int i, playing_side s);
 void write_jumps(std::vector<int> path, playing_side s);
-std::vector<std::string> split_string(std::string s);
+std::vector<std::string> split_string(std::string s, char separator);
