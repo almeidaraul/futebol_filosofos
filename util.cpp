@@ -152,7 +152,18 @@ int config::melhorPosicaoFilosofo(vector <tile> &tabuleiro, int direction) {
 
         if (*(ball_pos) == BALL)
             ball_pos += direction;
-        if (*(ball_pos-direction) != BALL && (abs(distance(ball_pos, gol_pos))) % 2 == 0)
+
+        bool ha_dois_filosofos_seguidos = false;
+        auto iter = find(tabuleiro.begin(), tabuleiro.end(), BALL);
+
+        while (iter != (gol_pos-direction)) {
+            if (*iter == PLAYER && *(iter+direction) == PLAYER)
+                ha_dois_filosofos_seguidos = true;
+            iter += direction;
+
+        }
+
+        if ((*(ball_pos-direction) != BALL) && (((abs(distance(ball_pos, gol_pos))) % 2 == 0) || (ha_dois_filosofos_seguidos)))
             ball_pos += direction;
 
         int posicao_filosofo = distance(tabuleiro.begin(), ball_pos);
