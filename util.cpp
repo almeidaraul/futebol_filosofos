@@ -27,7 +27,7 @@ void config::insert_player(int i) {
 		field[i] = PLAYER;
 }
 
-vector<tile>::iterator config::moveBolaIterador(vector <tile> tabuleiro, int direction) {
+vector<tile>::iterator config::moveBolaIterador(vector <tile> &tabuleiro, int direction) {
 
 		auto ball_pos = find(tabuleiro.begin(), tabuleiro.end(), BALL);
 		while (*(ball_pos + direction) == PLAYER) {
@@ -42,7 +42,7 @@ vector<tile>::iterator config::moveBolaIterador(vector <tile> tabuleiro, int dir
 		return ball_pos;
 
 }
-vector<int> config::moveBolaVetor(vector <tile> tabuleiro, int direction) {
+vector<int> config::moveBolaVetor(vector <tile> &tabuleiro, int direction) {
 
         vector<int> v;
 
@@ -78,7 +78,11 @@ bool config::haDoisOuMaisSaltos(int direction) {
 		vector <tile> field_copia = this->field;
 		auto ball_pos = find(field_copia.begin(), field_copia.end(), BALL);
 
-		if (abs(distance(moveBolaIterador(field_copia, direction), ball_pos)) > 2)
+		int dist = abs(distance(moveBolaIterador(field_copia, direction), ball_pos));
+		cout << "dist: " << dist << endl;
+		cout << "igual: " << (moveBolaIterador(field_copia, direction) == ball_pos) << endl;
+
+		if (dist > 2)
 				return true;
 		return false;
 
@@ -95,21 +99,39 @@ bool config::caiPosicaoMorta(int direction) {
 
 }
 
-int config::melhorPosicaoFilosofo(vector <tile> tabuleiro, int direction) {
+int config::melhorPosicaoFilosofo(vector <tile> &tabuleiro, int direction) {
 
         
-		auto ball_pos = find(this->field.begin(), this->field.end(), BALL);
-		auto gol_pos = (this->s == LEFT) ? field_copia.end()-1 : field_copia.begin();
+		auto ball_pos = find(tabuleiro.begin(), tabuleiro.end(), BALL)+1;
+		auto gol_pos = (this->s == LEFT) ? tabuleiro.end()-1 : tabuleiro.begin();
+
+		cout << "tile\n";
+		cout << "GOAL: " << (tile)GOAL << endl;
+		cout << "EMPTY: " << (tile)EMPTY << endl;
+		cout << "PLAYER: " << (tile)PLAYER << endl;
+		cout << "BALL: " << (tile)BALL << endl;
+		for (auto x: tabuleiro)
+			cout << x;
+		cout << endl;
+		cout << distance(tabuleiro.begin(), ball_pos) << " <- ball_pos\n";
+
+		while (ball_pos != tabuleiro.end() && (*(ball_pos) == PLAYER || *(ball_pos) == EMPTY && *(ball_pos-direction) == PLAYER))
+			ball_pos += direction;
+
+		/*
         while (*(ball_pos + direction) == PLAYER) {
             while (*(ball_pos + direction) == PLAYER)
                 ball_pos = ball_pos + direction;
             ball_pos = ball_pos+direction;
         }
+				*/
 
         int posicao_filosofo = distance(tabuleiro.begin(), ball_pos);
 
-        if ((abs(distance(ball_pos, gol_pos))) % 2 == 0)
-            posicao_filosos += direction;
+				cout << "distancia: " << abs(distance(ball_pos, gol_pos)) << endl;
+
+        if (*(ball_pos-direction) != BALL && (abs(distance(ball_pos, gol_pos))) % 2 == 0)
+            posicao_filosofo += direction;
         return posicao_filosofo;
 }
 
@@ -120,48 +142,74 @@ void config::play() {
 		auto gol_pos = (this->s == LEFT) ? field_copia.end()-1 : field_copia.begin();
 
 		
-		if (fazGol(direction))
+		if (fazGol(direction)) {
             write_jumps(moveBolaVetor(field_copia, direction), s);
-		else if (fazGol(-direction))    //se o oponente pode fazer gol
+						cout << "fazGol(direction)\n";
+		}
+		else if (fazGol(-direction))    {//se o oponente pode fazer gol 
             write_jumps(moveBolaVetor(field_copia, direction), s);
+						cout << "fazGol(-direction)\n";
+		}
 				//empurra a bola pra frente
-		else if (caiPosicaoMorta(direction))     //se cai exatamente ao lado do gol
+		else if (caiPosicaoMorta(direction))     { //se cai exatamente ao lado do gol
             write_player(distance(field_copia.begin(), gol_pos) - direction, s);
+						cout << "caiPosicaoMorta(direction)\n";
+		}
 				//coloca um filosófo na posição antes do gol
-		else if (haDoisOuMaisSaltos(direction))
+		else if (haDoisOuMaisSaltos(direction)) {
             write_jumps(moveBolaVetor(field_copia, direction), s);
+						cout << "haDoisOuMaisSaltos(direction)\n";
+		}
 				//manda a bola o mais pra frente possível
-		else
+		else {
             write_player(melhorPosicaoFilosofo(field_copia, direction), s);
+						cout << "else\n";
+		}
 				//coloca filosofo alternado
 				
 }
 
+vector<string> split_string(string s) {
+	vector<string> ans;
+	string t = "";
+	for (auto c: s)
+		if (c == ' ' || c == '\n') {
+			ans.push_back(t);
+			t = "";
+		} else {
+			t.push_back(c);
+		}
+	return ans;
+}
+
 config read_move() {
+	cout << "--------------------\n";
 	char _s;
 	unsigned int _k;
-	char char_field;
+	//char char_field;
 	char buf[512];
 	campo_recebe(buf);
-	sscanf(strtok(buf, " \n"), "%c", &_s);
-	sscanf(strtok(buf, " \n"), "%d", &_k);
-	sscanf(strtok(buf, " \n"), "%s", &char_field);
-	string _field(char_field, char_field+_k);
+	vector<string> split = split_string(buf);
+	for (auto x: split)
+		cout << "split -> " << x << endl;
+	_s = split[0][0];
+	_k = stoi(split[1]);
+	string _field = split[2];
 	config c = config(_s, _k, _field);
-	char cmd;
-	sscanf(strtok(buf, " \n"), "%c", &cmd);
-	if (cmd == 'f') {
-		int i;
-		sscanf(strtok(buf, " \n"), "%d", &i);
-		c.insert_player(i);
-	} else if (cmd == 'o') {
-		int jumps, dest;
-		vector<int> path;
-		sscanf(strtok(buf, " \n"), "%d", &jumps);
-		while (jumps--) {
-			sscanf(strtok(buf, " \n"), "%d", &dest);
-			path.push_back(dest);
-			//pula pro destino
+	if (split.size() > 3) {
+		char cmd = split[3][0];
+		if (cmd == 'f') {
+			int i = stoi(split[4]);
+			c.insert_player(i);
+		} else if (cmd == 'o') {
+			int jumps, dest;
+			vector<int> path;
+			jumps = stoi(split[4]);
+			int p = 5;
+			while (jumps--) {
+				path.push_back(stoi(split[p++]));
+				path.push_back(dest);
+			}
 		}
 	}
 	c.over = c.field[0] == BALL || c.field[c.k] == BALL;
@@ -171,15 +219,20 @@ config read_move() {
 void write_player(int i, playing_side s) {
 	char buf[512];
   sprintf(buf, "%c f %d\n", s == LEFT ? 'e' : 'd', i);
+	cout << "write_player " << buf << endl;
   campo_envia(buf);  
 }
 
 void write_jumps(vector<int> path, playing_side s) {
 	char buf[512];
+	char temp[51];
   sprintf(buf, "%c o %ld", s == LEFT ? 'e' : 'd', path.size());
-  sprintf(buf, "%c o %ld", s == LEFT ? 'e' : 'd', path.size());
-	for (auto jump: path)
-		sprintf(buf, " %d", jump);
-	sprintf(buf, "\n");
+	for (auto jump: path) {
+		sprintf(temp, " %d", jump);
+		strcat(buf, temp);
+	}
+	sprintf(temp, "\n");
+	strcat(buf, temp);
+	cout << "write_jumps " << buf << endl;
   campo_envia(buf);  
 }
