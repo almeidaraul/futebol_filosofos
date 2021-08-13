@@ -7,7 +7,7 @@ int main(int argc, char **argv) {
 		argv_c[i] = (char *)malloc(sizeof(argv[i]));//strdup(argv[i]);
 		strcpy(argv_c[i], argv[i]);
 	}
-	campo_conecta(argc, argv_c);
+	campo_conecta(argc, argv);
 	config c;
 	while (c = read_move(), !c.over)
 		c.play();

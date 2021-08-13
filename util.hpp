@@ -5,7 +5,9 @@
 #include <string>
 #include <cstring>
 #include <cmath>
+extern "C" {
 #include "campo.h"
+}
 
 typedef enum {
 	LEFT, RIGHT

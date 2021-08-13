@@ -1,16 +1,13 @@
 CFLAGS = -Wall -O3
-LDLIBS = -l hireds -l readline
+LDLIBS = -l hiredis -l readline
 
 all: main
 
-gcc:
-	gcc main.cpp util.cpp campo.c $(CFLAGS) $(LDLIBS) -o futebas
-
-gpp:
-	g++ main.cpp util.cpp campo.c $(CFLAGS) $(LDLIBS) -o futebas
-
 main:
-	g++ main.cpp util.cpp campo.c $(CFLAGS) $(LDLIBS) -o futebas
+	gcc $(CFLAGS) $(LDLIBS) -c -o campo.o campo.c
+	g++ -c -o main.o main.cpp $(CFLAGS) $(LDLIBS)
+	g++ -c -o util.o util.cpp $(CFLAGS) $(LDLIBS)
+	g++ -o futebas campo.o main.o util.o $(CFLAGS) $(LDLIBS)
 
 test: main
 	./futebas < in.txt
