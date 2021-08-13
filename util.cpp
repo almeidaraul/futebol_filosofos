@@ -130,8 +130,10 @@ void config::play() {
 	int direction = (this->s == LEFT) ? 1 : -1;
 	auto gol_pos = (this->s == LEFT) ? field_copia.end()-1 : field_copia.begin();
 
-	if (fazGol(direction))
+	if (fazGol(direction)) {
 		write_jumps(moveBolaVetor(field_copia, direction), s);
+		over = true;
+	}
 	else if (fazGol(-direction))//se o oponente pode fazer gol 
 		//empurra a bola pra frente
 		write_jumps(moveBolaVetor(field_copia, direction), s);
@@ -159,33 +161,17 @@ vector<string> split_string(string s, char separator=' ') {
 	return ans;
 }
 
-config read_move() {
-	char _s;
-	unsigned int _k;
+config read_move(config c = config()) {
+	char _s = c.s;
+	unsigned int _k = c.k;
 	char buf[512];
 	campo_recebe(buf);
 	vector<string> split = split_string(buf);
 	_s = split[0][0];
 	_k = stoi(split[1]);
 	string _field = split[2];
-	config c = config(_s, _k, _field);
-	if (split.size() > 3) {
-		char cmd = split[4][0];
-		if (cmd == 'f') {
-			int i = stoi(split[5]);
-			c.insert_player(i);
-		} else if (cmd == 'o') {
-			int jumps, dest;
-			vector<int> path;
-			jumps = stoi(split[4]);
-			int p = 5;
-			while (jumps--) {
-				dest = stoi(split[p++]);
-				path.push_back(dest);
-			}
-		}
-	}
-	c.over = c.field[0] == BALL || c.field[c.k] == BALL;
+	c = config(_s, _k, _field);
+	c.over = c.over || c.field[0] == BALL || c.field[c.k] == BALL;
 	return c;
 }
 
