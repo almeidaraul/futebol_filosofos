@@ -20,13 +20,6 @@ config::config (char s, unsigned int k, string _field) : s(s == 'e' ? LEFT : RIG
 		}
 }
 
-void config::insert_player(int i) {
-	if (field[i] != EMPTY)
-		cerr << "Tried inserting player at non-empty position " << i << '\n';
-	else
-		field[i] = PLAYER;
-}
-
 vector<tile>::iterator config::moveBolaIterador(vector <tile> &tabuleiro, int direction) {
 	auto ball_pos = find(tabuleiro.begin(), tabuleiro.end(), BALL);
 
@@ -67,7 +60,7 @@ vector<int> config::moveBolaVetor(vector <tile> &tabuleiro, int direction) {
 
 bool config::fazGol(int direction) {
 	vector <tile> field_copia = this->field;
-	auto gol_pos = (this->s == LEFT) ? field_copia.end()-1 : field_copia.begin();
+	auto gol_pos = (direction > 0) ? field_copia.end()-1 : field_copia.begin();
 
 	if (distance(moveBolaIterador(field_copia, direction), gol_pos) == 0)
 		return true;
@@ -80,7 +73,7 @@ bool config::deveSaltar(int direction) {
 
 	int dist = abs(distance(moveBolaIterador(field_copia, direction), ball_pos));
 
-	int distancia_a_saltar = max(this->k/4+1, (unsigned int)3);
+	int distancia_a_saltar = max((int)(this->k/4)+1, 3);
 
 	if (dist > distancia_a_saltar)
 		return true;
@@ -130,11 +123,9 @@ void config::play() {
 	int direction = (this->s == LEFT) ? 1 : -1;
 	auto gol_pos = (this->s == LEFT) ? field_copia.end()-1 : field_copia.begin();
 
-	if (fazGol(direction)) {
+	if (fazGol(direction))
 		write_jumps(moveBolaVetor(field_copia, direction), s);
-		//over = true;
-	}
-	else if (fazGol(-direction))//se o oponente pode fazer gol 
+	else if (fazGol(-direction)) //se o oponente pode fazer gol 
 		//empurra a bola pra frente
 		write_jumps(moveBolaVetor(field_copia, direction), s);
 	else if (caiPosicaoMorta(direction)) //se cai exatamente ao lado do gol

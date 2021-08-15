@@ -26,7 +26,6 @@ struct config {
 	config ();
 	config (char s, unsigned int k, std::string _field);
 
-	void insert_player(int i);
 	std::vector<tile>::iterator moveBolaIterador(std::vector <tile> &tabuleiro, int direction);
 	std::vector<int> moveBolaVetor(std::vector <tile> &tabuleiro, int direction) ;
 	int melhorPosicaoFilosofo(std::vector <tile> &tabuleiro, int direction);
