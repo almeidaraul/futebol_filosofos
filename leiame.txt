@@ -1,0 +1,22 @@
+# Futebol dos Filósofos
+Arthur Martinelli Antonietto - ama18 (GRR20182559)
+Raul Gomes Pimentel de Almeida - rgpa18 (GRR20182544)
+Trabalho 2 da disciplina de Inteligência Artificial
+ERE 3 - UFPR, 2021
+
+Este arquivo descreve a abordagem tomada para o desenvolvimento
+de um programa capaz de jogar o Futebol dos Filósofos.
+
+# Abordagem
+- separada em casos
+	descreve cada um
+- motivos de cada um tbm
+
+# Detalhes de Implementação
+O programa foi implementado em C++, fazendo uma interface com uma
+biblioteca C (provida pelo professor da disciplina) para comunicação
+com outros programas jogadores e com o campo em si.
+
+O estado atual do jogo é sempre guardado em uma variável do tipo
+definido config, que guarda informação tanto sobre o campo quanto
+sobre o jogador (além de manter todos os procedimentos de resolução)

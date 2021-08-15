@@ -175,13 +175,15 @@ config read_move(config c = config()) {
 	_k = stoi(split[1]);
 	string _field = split[2];
 	c = config(_s, _k, _field);
-	c.over = c.over || c.field[0] == BALL || c.field[c.k] == BALL;
+	c.over = c.over || c.field[0] == BALL || c.field[c.k] == BALL
+		|| find(c.field.begin(), c.field.end(), BALL) == c.field.end();
 	return c;
 }
 
 void write_player(int i, playing_side s) {
 	char buf[512];
 	sprintf(buf, "%c f %d\n", s == LEFT ? 'e' : 'd', i);
+	cout << "Sending move: " << buf << endl;
 	campo_envia(buf);  
 }
 
@@ -195,5 +197,6 @@ void write_jumps(vector<int> path, playing_side s) {
 	}
 	sprintf(temp, "\n");
 	strcat(buf, temp);
+	cout << "Sending move: " << buf << endl;
 	campo_envia(buf);  
 }
