@@ -80,7 +80,7 @@ bool config::deveSaltar(int direction) {
 
 	int dist = abs(distance(moveBolaIterador(field_copia, direction), ball_pos));
 
-	int distancia_a_saltar = (this->k/4 > 3) ? this->k/4 : 3;
+	int distancia_a_saltar = max(this->k/4+1, 3);
 
 	if (dist > distancia_a_saltar)
 		return true;

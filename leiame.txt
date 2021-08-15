@@ -7,10 +7,46 @@ ERE 3 - UFPR, 2021
 Este arquivo descreve a abordagem tomada para o desenvolvimento
 de um programa capaz de jogar o Futebol dos Filósofos.
 
+
+
 # Abordagem
+O algoritmo proposto divide as possibilidades de jogo em casos,
+tomando uma estratégia com base no caso reconhecido. Antes de
+apresentarmos os casos, introduzimos algumas expressões para
+facilitar a leitura:
+* Lado aliado: o lado do campo do qual joga nosso algoritmo;
+* Lado adversário: o lado oposto ao lado aliado;
+* 
+1) Lado aliado pode fazer gol em uma jogada
+Este é o caso mais simples, e consiste apenas em enviar o comando
+de saltos da bola até o gol.
+
+2) Lado adversário pode fazer gol em uma jogada
+Nesta situação temos o oposto do primeiro caso, e aqui nosso
+algoritmo busca desmontar a oportunidade levando a bola para o
+sentido oposto ao seu gol.
+
+3) Lado aliado pode levar a bola até a última posição antes do gol
+Neste caso, precisamos preparar uma jogada futura, inserindo um
+filósofo na posição vacante e possibilitando um gol futuro.
+
+4) Lado aliado pode levar a bola à frente sem que a jogada seja
+rapidamente desfeita pelo lado adversário
+Aqui, é importante notar que não basta levar a bola à frente no
+campo; se o adversário se atentar a nosso comportamento, pode
+ganhar ou no mínimo manter-nos em um vai-e-vem desagradável.
+O teste de capacidade de levar a bola suficientemente à frente
+consiste em dividir o campo em quartos; se conseguirmos levar
+ao último quarto do campo (isto é, à extremidade do gol
+adversário), fazemos a jogada.
+
+5)
+
+- falar que eles sao apresnetados na ordem de avaliação
 - separada em casos
 	descreve cada um
 - motivos de cada um tbm
+
 
 # Detalhes de Implementação
 O programa foi implementado em C++, fazendo uma interface com uma
