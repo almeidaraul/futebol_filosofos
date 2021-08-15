@@ -67,7 +67,7 @@ vector<int> config::moveBolaVetor(vector <tile> &tabuleiro, int direction) {
 
 bool config::fazGol(int direction) {
 	vector <tile> field_copia = this->field;
-	auto gol_pos = (this->s == LEFT) ? field_copia.end()-1 : field_copia.begin();
+	auto gol_pos = (direction > 0) ? field_copia.end()-1 : field_copia.begin();
 
 	if (distance(moveBolaIterador(field_copia, direction), gol_pos) == 0)
 		return true;
@@ -80,7 +80,7 @@ bool config::deveSaltar(int direction) {
 
 	int dist = abs(distance(moveBolaIterador(field_copia, direction), ball_pos));
 
-	int distancia_a_saltar = max(this->k/4+1, 3);
+	int distancia_a_saltar = max((int)(this->k/4)+1, 3);
 
 	if (dist > distancia_a_saltar)
 		return true;
@@ -134,9 +134,10 @@ void config::play() {
 		write_jumps(moveBolaVetor(field_copia, direction), s);
 		over = true;
 	}
-	else if (fazGol(-direction))//se o oponente pode fazer gol 
+	else if (fazGol(-direction)) {   //se o oponente pode fazer gol 
 		//empurra a bola pra frente
 		write_jumps(moveBolaVetor(field_copia, direction), s);
+    }
 	else if (caiPosicaoMorta(direction)) //se cai exatamente ao lado do gol
 		//coloca um filosófo na posição antes do gol
 		write_player(distance(field_copia.begin(), gol_pos) - direction, s);
