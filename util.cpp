@@ -80,7 +80,7 @@ bool config::deveSaltar(int direction) {
 
 	int dist = abs(distance(moveBolaIterador(field_copia, direction), ball_pos));
 
-	int distancia_a_saltar = max(this->k/4+1, 3);
+	int distancia_a_saltar = max(this->k/4+1, (unsigned int)3);
 
 	if (dist > distancia_a_saltar)
 		return true;
@@ -132,7 +132,7 @@ void config::play() {
 
 	if (fazGol(direction)) {
 		write_jumps(moveBolaVetor(field_copia, direction), s);
-		over = true;
+		//over = true;
 	}
 	else if (fazGol(-direction))//se o oponente pode fazer gol 
 		//empurra a bola pra frente
@@ -175,8 +175,7 @@ config read_move(config c = config()) {
 	_k = stoi(split[1]);
 	string _field = split[2];
 	c = config(_s, _k, _field);
-	c.over = c.over || c.field[0] == BALL || c.field[c.k] == BALL
-		|| find(c.field.begin(), c.field.end(), BALL) == c.field.end();
+	c.over = find(c.field.begin(), c.field.end(), BALL) == c.field.end();
 	return c;
 }
 

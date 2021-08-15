@@ -12,40 +12,51 @@ de um programa capaz de jogar o Futebol dos Filósofos.
 # Abordagem
 O algoritmo proposto divide as possibilidades de jogo em casos,
 tomando uma estratégia com base no caso reconhecido. Antes de
-apresentarmos os casos, introduzimos algumas expressões para
-facilitar a leitura:
-* Lado aliado: o lado do campo do qual joga nosso algoritmo;
-* Lado adversário: o lado oposto ao lado aliado;
-* 
+apresentarmos os casos, introduzimos duas expressões que
+facilitam a leitura: diz-se lado aliado o lado do campo do qual
+joga nosso algoritmo, e lado adversário o oposto a este.
+
+Agora, são apresentados os casos observados, na ordem de avaliação
+(isto é, em caso de ambiguidade, toma precedência o que aparece
+antes na lista abaixo).
+
 1) Lado aliado pode fazer gol em uma jogada
 Este é o caso mais simples, e consiste apenas em enviar o comando
-de saltos da bola até o gol.
+de saltos da bola até o gol. A motivação por trás desta jogada vem
+do objetivo do jogo.
+
 
 2) Lado adversário pode fazer gol em uma jogada
 Nesta situação temos o oposto do primeiro caso, e aqui nosso
 algoritmo busca desmontar a oportunidade levando a bola para o
-sentido oposto ao seu gol.
+sentido oposto ao seu gol. Fazemos isso para atrasar o oponente
+e comprar mais tempo para virarmos a partida.
+
 
 3) Lado aliado pode levar a bola até a última posição antes do gol
 Neste caso, precisamos preparar uma jogada futura, inserindo um
-filósofo na posição vacante e possibilitando um gol futuro.
+filósofo na posição vacante e possibilitando um gol futuro.  
 
 4) Lado aliado pode levar a bola à frente sem que a jogada seja
 rapidamente desfeita pelo lado adversário
 Aqui, é importante notar que não basta levar a bola à frente no
 campo; se o adversário se atentar a nosso comportamento, pode
 ganhar ou no mínimo manter-nos em um vai-e-vem desagradável.
+
 O teste de capacidade de levar a bola suficientemente à frente
 consiste em dividir o campo em quartos; se conseguirmos levar
 ao último quarto do campo (isto é, à extremidade do gol
 adversário), fazemos a jogada.
 
-5)
+Fazemos isso para evitar avanços adversários e facilitar futuros
+avanços aliados.
 
-- falar que eles sao apresnetados na ordem de avaliação
-- separada em casos
-	descreve cada um
-- motivos de cada um tbm
+5) Nenhum dos casos principais
+Se não entramos em nenhuma das situações definidas anteriormente,
+simplesmente posicionamos um filósofo entre a bola e o gol
+adversário, de preferência entre duas posições vazias seguidas de
+filósofos (isto é, transformar "f...f" em "f.f.f").
+
 
 
 # Detalhes de Implementação
